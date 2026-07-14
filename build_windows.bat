@@ -9,18 +9,16 @@ where g++ >nul 2>nul
 if errorlevel 1 goto :compiler_missing
 
 if not exist "%ROOT%build" mkdir "%ROOT%build"
-"%CXX%" %CXXFLAGS% -I"%ROOT%include" "%ROOT%src\library.cpp" "%ROOT%src\main.cpp" -o "%ROOT%build\library_cli.exe"
+if exist "%ROOT%build\library_cli.exe" del /q "%ROOT%build\library_cli.exe"
+if exist "%ROOT%build\library_tests.exe" del /q "%ROOT%build\library_tests.exe"
+if exist "%ROOT%build\library_manager.exe" del /q "%ROOT%build\library_manager.exe"
+
+"%CXX%" %CXXFLAGS% -municode -mwindows -I"%ROOT%include" "%ROOT%src\library.cpp" "%ROOT%src\windows_gui.cpp" -o "%ROOT%build\library_manager.exe" -lcomctl32
 if errorlevel 1 (
     echo Build failed.
     exit /b 1
 )
-
-"%CXX%" %CXXFLAGS% -I"%ROOT%include" "%ROOT%src\library.cpp" "%ROOT%tests\library_tests.cpp" -o "%ROOT%build\library_tests.exe"
-if errorlevel 1 exit /b 1
-
-"%ROOT%build\library_tests.exe"
-if errorlevel 1 exit /b 1
-echo Build and tests completed successfully.
+echo GUI build completed successfully: build\library_manager.exe
 exit /b 0
 
 :compiler_missing

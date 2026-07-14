@@ -1,6 +1,6 @@
 # スマート図書管理システム（C++ 期末課題）
 
-C++17で開発した図書在庫管理プログラムです。「コアライブラリ・コンソール画面・自動テスト」の三層構成を採用し、図書の登録・変更・削除・検索、貸出・返却、在庫統計、CSV形式でのデータ保存に対応しています。
+C++17とWin32 APIで開発したGUI図書在庫管理プログラムです。「コアライブラリ・GUI画面・データ保存」の三層構成を採用し、図書の登録・変更・削除・検索、貸出・返却、在庫統計、CSV形式でのデータ保存に対応しています。
 
 ## 特長
 
@@ -8,7 +8,8 @@ C++17で開発した図書在庫管理プログラムです。「コアライブ
 - 厳密な業務規則：図書番号の重複、負数の在庫、総冊数を超える貸出を防止
 - 柔軟な検索：図書番号の完全一致、書名・著者の部分一致に対応
 - 安全な保存：空白・カンマ・引用符を含むCSVを扱い、一時ファイル経由で保存
-- クロスプラットフォーム：CMakeに対応し、Windows用の一括ビルドスクリプトも同梱
+- GUI操作：一覧から図書を選択し、ボタン操作で登録・変更・貸出・返却が可能
+- CMakeに対応し、Windows用の一括ビルドスクリプトも同梱
 - 自動テスト：主要機能、境界値、統計、ファイル入出力を検証
 - 継続的インテグレーション：GitHub ActionsでWindowsとUbuntuのビルド・テストを自動実行
 
@@ -26,19 +27,18 @@ C++17で開発した図書在庫管理プログラムです。「コアライブ
 
 ### Windowsで一括ビルド
 
-MinGW-w64またはMSYS2が必要です。`build_windows.bat`を実行すると、ビルドとテストが行われ、次のファイルが生成されます。生成されるEXEは静的リンク済みのため、配布先でMinGWのDLLを別途用意する必要はありません。
+MinGW-w64またはMSYS2が必要です。`build_windows.bat`を実行すると、次のGUIプログラムだけが生成されます。EXEは静的リンク済みのため、配布先でMinGWのDLLを別途用意する必要はありません。
 
 ```text
-build/library_cli.exe
-build/library_tests.exe
+build/library_manager.exe
 ```
 
-`library_cli.exe`が実際の図書管理プログラムです。`library_tests.exe`は開発者向けの自動テストで、検証終了後に自動的に終了します。
+ビルドスクリプトは旧版の`library_cli.exe`と`library_tests.exe`を自動的に削除します。利用者向けの実行ファイルは`library_manager.exe`の一つだけです。
 
 プログラムを起動します。
 
 ```powershell
-.\build\library_cli.exe
+.\build\library_manager.exe
 ```
 
 ### CMakeを使用する場合
@@ -46,26 +46,21 @@ build/library_tests.exe
 ```bash
 cmake -S . -B build
 cmake --build build
-ctest --test-dir build --output-on-failure
 ```
 
-既定では`data/books.csv`を読み書きします。別のデータファイルを使用する場合は、起動引数で指定できます。
-
-```bash
-./build/library_cli my_books.csv
-```
+既定ではプロジェクト内の`data/books.csv`を自動的に読み書きします。EXEだけを別の場所へコピーした場合は、EXEと同じフォルダーに`books.csv`を作成します。
 
 ## フォルダー構成
 
 ```text
 .
 ├── include/library/       # 公開データモデルと業務インターフェース
-├── src/                   # コア実装とコンソール画面
-├── tests/                 # 外部ライブラリ不要の自動テスト
+├── src/                   # コア実装とWin32 GUI画面
+├── tests/                 # GitHub Actions用の自動テスト
 ├── data/books.csv         # サンプルデータ
 ├── docs/DESIGN.md         # 設計および学習項目の説明
 ├── CMakeLists.txt         # クロスプラットフォーム用ビルド設定
-└── build_windows.bat      # Windows用一括ビルド・テスト
+└── build_windows.bat      # Windows用GUI一括ビルド
 ```
 
 ## データ形式
@@ -83,7 +78,7 @@ id,title,author,total,borrowed
 
 ## 初期版について
 
-ローカルフォルダーには改良前のコンソール版とWin32 GUI版を比較資料として残していますが、新しいGitHubリポジトリには含めません。新しいコアライブラリは画面から独立しているため、今後Qt、Win32、Web画面などを追加できます。
+新しいGUIは業務ロジックから分離されており、画面を変更しても在庫管理やCSV保存の規則を再利用できます。自動テストはGitHub Actions内部でのみ生成・実行され、通常のWindowsビルドには含まれません。
 
 ## ライセンス
 
