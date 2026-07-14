@@ -1,0 +1,19 @@
+/build/
+/out/
+/.vs/
+/.vscode/
+*.exe
+*.dll
+*.o
+*.obj
+*.pdb
+*.tmp
+cmake-build-*/
+
+# Local legacy files retained for comparison, not part of the new submission
+/library1.cpp
+/library_gui.cpp
+/README.txt
+/books.txt
+/*.bat
+!/build_windows.bat

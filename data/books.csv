@@ -1,0 +1,4 @@
+id,title,author,total,borrowed
+1001,The C++ Programming Language,Bjarne Stroustrup,3,1
+1002,C++ Primer,Stanley B. Lippman,2,0
+1003,Design Patterns,Erich Gamma,2,1

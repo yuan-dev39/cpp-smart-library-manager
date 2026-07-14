@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 3.16)
+project(SmartLibraryManager VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+add_library(library_core src/library.cpp)
+target_include_directories(library_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+if(MSVC)
+    target_compile_options(library_core PRIVATE /W4 /permissive-)
+else()
+    target_compile_options(library_core PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+add_executable(library_cli src/main.cpp)
+target_link_libraries(library_cli PRIVATE library_core)
+
+option(BUILD_TESTING "Build automated tests" ON)
+if(BUILD_TESTING)
+    enable_testing()
+    add_executable(library_tests tests/library_tests.cpp)
+    target_link_libraries(library_tests PRIVATE library_core)
+    add_test(NAME library_tests COMMAND library_tests)
+endif()
+
+option(BUILD_LEGACY_GUI "Build the original Win32 GUI" OFF)
+if(WIN32 AND BUILD_LEGACY_GUI)
+    add_executable(library_gui WIN32 library_gui.cpp)
+    target_link_libraries(library_gui PRIVATE comctl32)
+endif()

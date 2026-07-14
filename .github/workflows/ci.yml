@@ -1,0 +1,20 @@
+name: C++ 自動ビルド・テスト
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: ビルド設定
+        run: cmake -S . -B build -DBUILD_TESTING=ON
+      - name: ビルド
+        run: cmake --build build --config Release
+      - name: テスト
+        run: ctest --test-dir build -C Release --output-on-failure
