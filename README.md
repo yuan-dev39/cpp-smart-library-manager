@@ -26,12 +26,14 @@ C++17で開発した図書在庫管理プログラムです。「コアライブ
 
 ### Windowsで一括ビルド
 
-MinGW-w64またはMSYS2が必要です。`build_windows.bat`を実行すると、ビルドとテストが行われ、次のファイルが生成されます。
+MinGW-w64またはMSYS2が必要です。`build_windows.bat`を実行すると、ビルドとテストが行われ、次のファイルが生成されます。生成されるEXEは静的リンク済みのため、配布先でMinGWのDLLを別途用意する必要はありません。
 
 ```text
 build/library_cli.exe
 build/library_tests.exe
 ```
+
+`library_cli.exe`が実際の図書管理プログラムです。`library_tests.exe`は開発者向けの自動テストで、検証終了後に自動的に終了します。
 
 プログラムを起動します。
 

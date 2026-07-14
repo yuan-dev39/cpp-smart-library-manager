@@ -16,12 +16,18 @@ endif()
 
 add_executable(library_cli src/main.cpp)
 target_link_libraries(library_cli PRIVATE library_core)
+if(MINGW)
+    target_link_options(library_cli PRIVATE -static -static-libgcc -static-libstdc++)
+endif()
 
 option(BUILD_TESTING "Build automated tests" ON)
 if(BUILD_TESTING)
     enable_testing()
     add_executable(library_tests tests/library_tests.cpp)
     target_link_libraries(library_tests PRIVATE library_core)
+    if(MINGW)
+        target_link_options(library_tests PRIVATE -static -static-libgcc -static-libstdc++)
+    endif()
     add_test(NAME library_tests COMMAND library_tests)
 endif()
 
