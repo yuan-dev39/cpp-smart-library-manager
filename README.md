@@ -25,12 +25,23 @@ C++17とWin32 APIで開発したGUI図書在庫管理プログラムです。「
 
 ## 実行方法
 
+### ダウンロード後すぐに実行する（推奨）
+
+GitHubの「Code」からZIPをダウンロードして展開し、次のファイルをダブルクリックしてください。ビルド、MinGWのインストール、DLLの追加は不要です。
+
+```text
+release/SmartLibraryManager.exe
+```
+
+このEXEはC++ランタイムを静的リンクした配布用GUIアプリです。リポジトリ内では`data/books.csv`を読み書きし、EXEだけを別の場所へコピーした場合は同じフォルダーに`books.csv`を自動作成します。
+
 ### Windowsで一括ビルド
 
-MinGW-w64またはMSYS2が必要です。`build_windows.bat`を実行すると、次のGUIプログラムだけが生成されます。EXEは静的リンク済みのため、配布先でMinGWのDLLを別途用意する必要はありません。
+開発者がソースコードを変更して再ビルドする場合だけ、MinGW-w64またはMSYS2が必要です。`build_windows.bat`を実行すると、次のGUIプログラムと配布用EXEが生成されます。
 
 ```text
 build/library_manager.exe
+release/SmartLibraryManager.exe
 ```
 
 ビルドスクリプトは旧版の`library_cli.exe`と`library_tests.exe`を自動的に削除します。利用者向けの実行ファイルは`library_manager.exe`の一つだけです。
@@ -58,6 +69,7 @@ cmake --build build
 ├── src/                   # コア実装とWin32 GUI画面
 ├── tests/                 # GitHub Actions用の自動テスト
 ├── data/books.csv         # サンプルデータ
+├── release/               # ビルド不要で直接実行できる配布用EXE
 ├── docs/DESIGN.md         # 設計および学習項目の説明
 ├── CMakeLists.txt         # クロスプラットフォーム用ビルド設定
 └── build_windows.bat      # Windows用GUI一括ビルド

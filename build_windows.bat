@@ -9,6 +9,7 @@ where g++ >nul 2>nul
 if errorlevel 1 goto :compiler_missing
 
 if not exist "%ROOT%build" mkdir "%ROOT%build"
+if not exist "%ROOT%release" mkdir "%ROOT%release"
 if exist "%ROOT%build\library_cli.exe" del /q "%ROOT%build\library_cli.exe"
 if exist "%ROOT%build\library_tests.exe" del /q "%ROOT%build\library_tests.exe"
 if exist "%ROOT%build\library_manager.exe" del /q "%ROOT%build\library_manager.exe"
@@ -18,7 +19,13 @@ if errorlevel 1 (
     echo Build failed.
     exit /b 1
 )
+copy /y "%ROOT%build\library_manager.exe" "%ROOT%release\SmartLibraryManager.exe" >nul
+if errorlevel 1 (
+    echo Release copy failed.
+    exit /b 1
+)
 echo GUI build completed successfully: build\library_manager.exe
+echo Ready-to-run release: release\SmartLibraryManager.exe
 exit /b 0
 
 :compiler_missing
